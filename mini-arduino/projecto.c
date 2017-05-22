@@ -70,15 +70,15 @@ void changePath()
     //Para os motores.
     moveStop(); 
     delay(moveServoLeft());
-    //Mede a distância à direita.
-    int rightDistance = readPing(); 
-    Serial.print("Right: ");
-    Serial.println(rightDistance);
-    delay(moveServoRight());
     //Mede a distância à esquerda.
     int leftDistance = readPing();
     Serial.print("Left: ");
     Serial.println(leftDistance);
+    //Mede a distância à direita.
+    delay(moveServoRight());
+    int rightDistance = readPing(); 
+    Serial.print("Right: ");
+    Serial.println(rightDistance);
     //Retorna sensor ao centro.
     servoMotor.write(90); 
     //Manobra para evitar colisão.
@@ -158,10 +158,10 @@ int turnRight()
 {
     Serial.println("Turned right!");
     int moveTime = 350;
-    leftMotorI.run(FORWARD);   // turn motor 1 forward
-    leftMotorII.run(FORWARD);  // turn motor 2 forward
-    rightMotorI.run(BACKWARD);  // turn motor 3 FORWARD
-    rightMotorII.run(BACKWARD); // turn motor 4 FORWARD
+    leftMotorI.run(FORWARD);
+    leftMotorII.run(FORWARD);
+    rightMotorI.run(BACKWARD);
+    rightMotorII.run(BACKWARD);
     rightMotorI.setSpeed(speedSet + MAX_SPEED_OFFSET);
     rightMotorII.setSpeed(speedSet + MAX_SPEED_OFFSET);
     return moveTime;
@@ -172,12 +172,12 @@ int turnLeft()
 {
     Serial.println("Turned left!");
     int moveTime = 350;
-    leftMotorI.run(BACKWARD);  // turn motor 1 FORWARD
-    leftMotorII.run(BACKWARD); // turn motor 2 FORWARD
+    leftMotorI.run(BACKWARD);
+    leftMotorII.run(BACKWARD);
     leftMotorI.setSpeed(speedSet + MAX_SPEED_OFFSET);
     leftMotorII.setSpeed(speedSet + MAX_SPEED_OFFSET);
-    rightMotorI.run(FORWARD);  // turn motor 3 forward
-    rightMotorII.run(FORWARD); // turn motor 4 forward
+    rightMotorI.run(FORWARD);
+    rightMotorII.run(FORWARD);
     return moveTime;
 }
 
@@ -186,10 +186,10 @@ int turnAround()
 {
     Serial.println("Turned around!");
     int moveTime = 500;
-    leftMotorI.run(BACKWARD);   // turn motor 1 forward
-    leftMotorII.run(BACKWARD);  // turn motor 2 forward
-    rightMotorI.run(FORWARD);  // turn motor 3 FORWARD
-    rightMotorII.run(FORWARD); // turn motor 4 FORWARD
+    leftMotorI.run(BACKWARD);
+    leftMotorII.run(BACKWARD);
+    rightMotorI.run(FORWARD);
+    rightMotorII.run(FORWARD);
     rightMotorI.setSpeed(speedSet + MAX_SPEED_OFFSET);
     rightMotorII.setSpeed(speedSet + MAX_SPEED_OFFSET);
     return moveTime;
