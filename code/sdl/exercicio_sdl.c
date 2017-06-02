@@ -316,7 +316,7 @@ void mainLoop(SDL_Renderer *renderer, SDL_Window *window)
 		batchUpdate(rects);
 		batchDraw(renderer, rects);
 		
-		if (heardQuitGameEvent() || clickedAnyRect(rects))
+		if (clickedAnyRect(rects) || heardQuitGameEvent())
 		{
 			endProgram(renderer, window, rects);
 			break;
