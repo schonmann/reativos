@@ -87,10 +87,14 @@ void handleKeyboard(GameObjects * objs) {
     Object * player = &objs->objects[3];
     const Uint8* keystates = SDL_GetKeyboardState(NULL);
     if(keystates[SDL_SCANCODE_RIGHT]) {
-        player->x += player->dx;
+        player->x += player->dx; 
     } else if (keystates[SDL_SCANCODE_LEFT]) {
         player->x -= player->dx;
     }
+    int bounds_r = getWidth() - player->w;
+    int bounds_l = 0;
+    if(player->x >= bounds_r) player->x = bounds_r;
+    if(player->x <= bounds_l) player->x = bounds_l; 
 }
 
 void updateEnemies(GameObjects * objs) {
