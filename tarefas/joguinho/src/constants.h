@@ -9,6 +9,8 @@
 #define ASSET_BACKGROUND_L0 ASSETS "bg.png"
 #define ASSET_BACKGROUND_L1 ASSETS "bg1.png"
 #define ASSET_BACKGROUND_L2 ASSETS "bg2.png"
+#define PLAYER_DDX 1
+#define PLAYER_MAX_DX 4
 #define R_SCALE_X 2
 #define R_SCALE_Y 2
 

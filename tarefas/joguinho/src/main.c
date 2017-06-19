@@ -29,6 +29,7 @@ Object newPlayer(SDL_Renderer * renderer) {
     obj->x = getWidth()/2 - obj->w/2;
     obj->y = getHeight() - obj->h*2;
     obj->dx = 4;
+    obj->ddy = 1;
     return * obj;
 }
 
@@ -86,15 +87,18 @@ GameObjects * setup(SDL_Renderer * renderer) {
 void handleKeyboard(GameObjects * objs) {
     Object * player = &objs->objects[3];
     const Uint8* keystates = SDL_GetKeyboardState(NULL);
+
+    int bounds_d = getHeight() - player->h*2;
+
     if(keystates[SDL_SCANCODE_RIGHT]) {
-        player->x += player->dx; 
+        player->ddx = PLAYER_DDX; 
     } else if (keystates[SDL_SCANCODE_LEFT]) {
-        player->x -= player->dx;
+        player->ddx = -PLAYER_DDX;
     }
-    int bounds_r = getWidth() - player->w;
-    int bounds_l = 0;
-    if(player->x >= bounds_r) player->x = bounds_r;
-    if(player->x <= bounds_l) player->x = bounds_l; 
+
+    if (keystates[SDL_SCANCODE_SPACE] && player->y == bounds_d) {
+        player->dy = - 12;
+    }
 }
 
 void updateEnemies(GameObjects * objs) {
@@ -105,6 +109,22 @@ void updateEnemies(GameObjects * objs) {
             enemy->y = -enemy->h;
         }
     }
+}
+
+void updatePlayer(GameObjects * objs) {
+    Object * player = &objs->objects[3];
+    player->dx += player->ddx;
+    player->x += player->dx;
+    player->dy += player->ddy;
+    player->y += player->dy;
+
+    int bounds_r = getWidth() - player->w;
+    int bounds_l = 0;
+    int bounds_d = getHeight() - player->h*2;
+
+    player->x = clamp(player->x, bounds_l, bounds_r);
+    player->dx = clamp(player->dx, -PLAYER_MAX_DX, PLAYER_MAX_DX);
+    player->y = clamp(player->y, 0, bounds_d);
 }
 
 void finish() {
@@ -128,6 +148,7 @@ void checkForCollision(GameObjects * objs) {
 void update(GameObjects * objs) {
     handleKeyboard(objs);
     updateEnemies(objs);
+    updatePlayer(objs);
     checkForCollision(objs);
 }
 

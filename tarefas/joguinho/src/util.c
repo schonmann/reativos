@@ -17,8 +17,11 @@ typedef struct object
 	int y;
     int w;
     int h;
-	float dx;
-	float dy;
+	int dx;
+	int dy;
+    int ddx;
+    int ddy;
+
 	SDL_Texture *texture;
 
 } Object;
@@ -52,6 +55,8 @@ Object * newObject(SDL_Renderer * renderer, char * texturePath) {
     object->y = 0;
     object->dx = 0;
 	object->dy = 0;
+    object->ddx = 0;
+    object->ddy = 0;
 
     SDL_QueryTexture(texture,NULL,NULL,&object->w,&object->h);
     
@@ -81,4 +86,10 @@ int circularCollision(Object *a, Object *b) {
     int oyb = yb + hb/2;
     double distBetweenOrigins = sqrt(pow(oxa-oxb,2) + pow(oya-oyb,2));
     return distBetweenOrigins*e <= wa/2 + wb/2;
+}
+
+int clamp(int x, int min, int max) {
+    if (x < min) return min;
+    if (x > max) return max;
+    return x;
 }

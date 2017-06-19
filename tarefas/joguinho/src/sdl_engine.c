@@ -92,8 +92,6 @@ void mainLoop(SDL_Renderer *renderer, SDL_Window *window)
 	while (running)
 	{
 		lastTick = SDL_GetTicks();
-		update(gameObjects);
-		draw(renderer, gameObjects);
 		frameCount++;
 		printf("AVG FPS: %f\n", frameCount/ (SDL_GetTicks() / 1000.0) );
 
@@ -108,6 +106,9 @@ void mainLoop(SDL_Renderer *renderer, SDL_Window *window)
 		if(SDL_GetTicks() - lastTick < TICKS_PER_FRAME) {
 			SDL_Delay(TICKS_PER_FRAME - SDL_GetTicks() + lastTick);
 		}
+
+		update(gameObjects);
+		draw(renderer, gameObjects);
 	}
 }
 
