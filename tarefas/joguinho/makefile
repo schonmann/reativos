@@ -7,7 +7,7 @@ game: all.o
 debug: all.o
 	gcc -o game *.o  -DDEBUG -lSDL2 -lSDL2_image -lm
 
-# Compile all .cpp object files for future linking.
+# Compile all .c correspondant object files for future linking.
 
 all.o:
 	find . -type f -name '*.c' -exec sh -c 'gcc {} -Iinclude -c $(basename {} .c)' \;
