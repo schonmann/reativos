@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "sdl_video.h": "c",
+        "events.h": "c",
+        "util.h": "c",
+        "sdl_render.h": "c",
+        "sdl_events.h": "c",
+        "sdl_rect.h": "c",
+        "sdl_touch.h": "c",
+        "constants.h": "c"
+    }
+}

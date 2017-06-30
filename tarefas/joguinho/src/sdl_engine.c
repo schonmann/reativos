@@ -1,7 +1,7 @@
-#include "constants.h"
-#include "main.c"
-#include "sdl_engine.h"
-#include "events.c"
+#include <constants.h>
+#include <main.h>
+#include <sdl_engine.h>
+#include <events.h>
 
 #define MAX_FPS 60
 #define TICKS_PER_FRAME 1000/MAX_FPS
