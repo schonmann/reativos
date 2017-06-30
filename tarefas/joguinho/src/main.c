@@ -1,6 +1,7 @@
-#include "main.h"
-#include "util.c"
-#include "events.c"
+#include <constants.h>
+#include <main.h>
+#include <util.h>
+#include <events.h>
 #include <math.h>
 
 int collidesWith(SDL_Rect rect, int x, int y)

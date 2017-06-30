@@ -1,31 +1,5 @@
-#include "util.h"
-#include "constants.h"
-
-/* Struct to wrap all game objects and it's quantity as n. */
-
-typedef struct game_objects {
-    int n;
-    Object * objects;
-
-} GameObjects;
-
-/* Struct to represent a drawable game object. */
-
-typedef struct object
-{
-	int x;
-	int y;
-    int w;
-    int h;
-	int dx;
-	int dy;
-    int ddx;
-    int ddy;
-
-	SDL_Texture *texture;
-
-} Object;
-
+#include <util.h>
+#include <constants.h>
 
 void assertTextureNotNull(SDL_Texture * texture){
     if(texture == NULL) {
