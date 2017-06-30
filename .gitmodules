@@ -1,0 +1,3 @@
+[submodule "ProjetoFinal/cpp-sdl-game"]
+	path = ProjetoFinal/cpp-sdl-game
+	url = https://github.com/schonmann/cpp-sdl-game
