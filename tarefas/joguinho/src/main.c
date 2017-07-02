@@ -3,25 +3,27 @@
 #include <util.h>
 #include <events.h>
 #include <math.h>
+#include <time.h>
 
-int collidesWith(SDL_Rect rect, int x, int y)
+int collidesWith(SDL_Rect rect, double x, double y)
 {
-	int rx = rect.x;
-	int ry = rect.y;
-	int rw = rect.w;
-	int rh = rect.h;
+	double rx = rect.x;
+	double ry = rect.y;
+	double rw = rect.w;
+	double rh = rect.h;
 	int collidesXAxis = rx <= x && x <= rx + rw;
 	int collidesYAxis = ry <= y && y <= ry + rh;
 
 	return collidesXAxis && collidesYAxis;
 }
 
-Object newEnemy(SDL_Renderer * renderer, int x, int y) {
+Object newEnemy(SDL_Renderer * renderer, double x, double y) {
     Object * obj = newObject(renderer, ASSET_ENEMY);
     obj->x = x - obj->w/2;
     obj->y = y - obj->h/2;
     obj->dx = 0;
-    obj->dy = 3;
+    obj->dy = .5;
+    obj->ddy = 0.1;
     return * obj;
 }
 
@@ -62,7 +64,7 @@ GameObjects * setup(SDL_Renderer * renderer) {
     objs->objects[2] = newBackgroundL2(renderer);
     objs->objects[3] = newPlayer(renderer);
 
-    int x1,x2,x3,x4,x5,y1,y2,y3,y4,y5;
+    double x1,x2,x3,x4,x5,y1,y2,y3,y4,y5;
 
     x1 = 1*getWidth()/6;
     x2 = 2*getWidth()/6;
@@ -105,9 +107,12 @@ void handleKeyboard(GameObjects * objs) {
 void updateEnemies(GameObjects * objs) {
     for(int i = 4; i <= objs->n; i++) {
         Object * enemy = &objs->objects[i];
+        enemy->dy += enemy->ddy;
         enemy->y += enemy->dy;
         if(enemy->y >= getHeight() + enemy->h) {
             enemy->y = -enemy->h;
+            enemy->dy = .5;
+            enemy->x = rand() % getWidth();
         }
     }
 }
@@ -119,9 +124,9 @@ void updatePlayer(GameObjects * objs) {
     player->dy += player->ddy;
     player->y += player->dy;
 
-    int bounds_r = getWidth() - player->w;
-    int bounds_l = 0;
-    int bounds_d = getHeight() - player->h*2;
+    double bounds_r = getWidth() - player->w;
+    double bounds_l = 0;
+    double bounds_d = getHeight() - player->h*2;
 
     player->x = clamp(player->x, bounds_l, bounds_r);
     player->dx = clamp(player->dx, -PLAYER_MAX_DX, PLAYER_MAX_DX);

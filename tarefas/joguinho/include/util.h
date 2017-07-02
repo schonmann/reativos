@@ -9,10 +9,10 @@ typedef struct object
 	int y;
     int w;
     int h;
-	int dx;
-	int dy;
-    int ddx;
-    int ddy;
+	double dx;
+	double dy;
+    double ddx;
+    double ddy;
 
 	SDL_Texture *texture;
 
@@ -30,6 +30,6 @@ void assertTextureNotNull(SDL_Texture * texture);
 Object * newObject(SDL_Renderer * renderer, char * texture);
 int getWidth();
 int getHeight();
-int clamp(int x, int min, int max);
+double clamp(double x, double min, double max);
 int rectangularCollision(Object *a, Object *b);
 int circularCollision(Object *a, Object *b);
