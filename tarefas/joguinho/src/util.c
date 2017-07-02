@@ -49,20 +49,20 @@ int rectangularCollision(Object *a, Object *b) {
 
 int circularCollision(Object *a, Object *b) {
     double e = 1.1;
-    int xa = a->x; int wa = a->w;
-    int xb = b->x; int wb = b->w;
-    int ya = a->y; int ha = a->h;
-    int yb = b->y; int hb = b->h;
+    double xa = a->x; double wa = a->w;
+    double xb = b->x; double wb = b->w;
+    double ya = a->y; double ha = a->h;
+    double yb = b->y; double hb = b->h;
 
-    int oxa = xa + wa/2; 
-    int oxb = xb + wb/2;
-    int oya = ya + ha/2;
-    int oyb = yb + hb/2;
+    double oxa = xa + wa/2; 
+    double oxb = xb + wb/2;
+    double oya = ya + ha/2;
+    double oyb = yb + hb/2;
     double distBetweenOrigins = sqrt(pow(oxa-oxb,2) + pow(oya-oyb,2));
     return distBetweenOrigins*e <= wa/2 + wb/2;
 }
 
-int clamp(int x, int min, int max) {
+double clamp(double x, double min, double max) {
     if (x < min) return min;
     if (x > max) return max;
     return x;

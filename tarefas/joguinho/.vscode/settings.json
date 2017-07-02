@@ -7,6 +7,8 @@
         "sdl_events.h": "c",
         "sdl_rect.h": "c",
         "sdl_touch.h": "c",
-        "constants.h": "c"
+        "constants.h": "c",
+        "main.h": "c",
+        "limits": "c"
     }
 }
