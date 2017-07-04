@@ -22,7 +22,7 @@ typedef struct object
 
 typedef struct game_objects {
     int n;
-    Object * objects;
+    Object ** objects;
 
 } GameObjects;
 

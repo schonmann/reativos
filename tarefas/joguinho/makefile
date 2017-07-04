@@ -3,9 +3,9 @@ run: game cleanup
 cleanup: game
 	rm *.o
 game: all.o
-	gcc -o game *.o  -lSDL2 -lSDL2_image -lm
+	gcc -o game *.o  -lSDL2 -lSDL2_image -lSDL2_ttf -lm
 debug: all.o
-	gcc -o game *.o  -DDEBUG -lSDL2 -lSDL2_image -lm
+	gcc -o game *.o  -DDEBUG -lSDL2 -lSDL2_image -lSDL2_ttf -lm
 
 # Compile all .c correspondant object files for future linking.
 

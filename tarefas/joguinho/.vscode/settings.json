@@ -9,6 +9,17 @@
         "sdl_touch.h": "c",
         "constants.h": "c",
         "main.h": "c",
-        "limits": "c"
+        "limits": "c",
+        "sdl_scancode.h": "c",
+        "sdl_engine.h": "c",
+        "time.h": "c",
+        "stdlib.h": "c",
+        "sdl_messagebox.h": "c",
+        "sdl_ttf.h": "c",
+        "begin_code.h": "c",
+        "libio.h": "c",
+        "sdl_rwops.h": "c",
+        "sdl_surface.h": "c",
+        "sdl_keyboard.h": "c"
     }
 }
