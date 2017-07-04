@@ -5,6 +5,9 @@
 #include <math.h>
 #include <time.h>
 #include <sdl_engine.h>
+#include <SDL2/SDL_ttf.h>
+
+int gameOver;
 
 int collidesWith(SDL_Rect rect, double x, double y)
 {
@@ -82,6 +85,8 @@ GameObjects * setup(SDL_Renderer * renderer) {
     objs->objects[7] = newEnemy(renderer, -7*getHeight()/11);
     objs->objects[8] = newEnemy(renderer, -9*getHeight()/11);
 
+    gameOver = false;
+
     //Retorna objetos.
 
     return objs;
@@ -134,25 +139,20 @@ void updatePlayer(GameObjects * objs) {
     player->y = clamp(player->y, 0, bounds_d);
 }
 
-void finish() {
-    SDL_Event sdlevent;
-    sdlevent.type = SDL_QUIT;
-    SDL_PushEvent(&sdlevent);
-}
-
 void checkForCollision(GameObjects * objs) {
     Object * player = objs->objects[3];
     for(int i = 4; i < objs->n; i++) {
         Object * enemy = objs->objects[i];
         if(circularCollision(player,enemy)) {
-            printf("Collision! Quitting game...");
-            SDL_Delay(1000);
-            finish();
+            printf("Collision!");
+            gameOver = true;
         }
     }
 }
 
 void update(GameObjects * objs) {
+    if(gameOver) return;
+
     handleKeyboard(objs);
     updateEnemies(objs);
     updatePlayer(objs);
@@ -172,6 +172,20 @@ void draw(SDL_Renderer * renderer, GameObjects * objs) {
         destination.w = object->w;
         destination.h = object->h;
         SDL_RenderCopy(renderer, object->texture, NULL, &destination);  
+    }
+
+    if(gameOver) {
+        TTF_Init();
+        TTF_Font *f = TTF_OpenFont("./assets/arcade.TTF", 30);
+        SDL_Color c;
+        c.r = 255; c.g = 80; c.b = 80;
+        SDL_Surface * message = TTF_RenderText_Solid(f, "GAME OVER!", c);
+        SDL_Texture * t = SDL_CreateTextureFromSurface(renderer, message);
+        SDL_Rect r;
+        r.x = getWidth()/2 - message->w/2; r.y = getHeight()/2 - message->h/2;
+        r.w = message->w;
+        r.h = message->h;
+        SDL_RenderCopy(renderer, t, NULL, &r);
     }
 
     SDL_RenderPresent(renderer);
