@@ -9,6 +9,10 @@
         "sdl_touch.h": "c",
         "constants.h": "c",
         "main.h": "c",
-        "limits": "c"
+        "limits": "c",
+        "sdl_scancode.h": "c",
+        "sdl_engine.h": "c",
+        "time.h": "c",
+        "stdlib.h": "c"
     }
 }

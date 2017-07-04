@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
 		onError(1);
 	}
 	//Try to initialize renderer.
-	SDL_Renderer *renderer = createRenderer(window);
+	renderer = createRenderer(window);
 	if (renderer == NULL)
 	{
 		onError(2);

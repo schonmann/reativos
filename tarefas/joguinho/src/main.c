@@ -4,6 +4,7 @@
 #include <events.h>
 #include <math.h>
 #include <time.h>
+#include <sdl_engine.h>
 
 int collidesWith(SDL_Rect rect, double x, double y)
 {
@@ -17,78 +18,77 @@ int collidesWith(SDL_Rect rect, double x, double y)
 	return collidesXAxis && collidesYAxis;
 }
 
-Object newEnemy(SDL_Renderer * renderer, double x, double y) {
+Object *newEnemy(SDL_Renderer * renderer, double y) {
     Object * obj = newObject(renderer, ASSET_ENEMY);
-    obj->x = x - obj->w/2;
-    obj->y = y - obj->h/2;
+    obj->x = rand() % getWidth() - obj->w/2;
+    obj->y = y;
     obj->dx = 0;
     obj->dy = .5;
     obj->ddy = 0.1;
-    return * obj;
+    return obj;
 }
 
-Object newPlayer(SDL_Renderer * renderer) {
+Object *newPlayer(SDL_Renderer * renderer) {
     Object * obj = newObject(renderer, ASSET_PLAYER);
     obj->x = getWidth()/2 - obj->w/2;
     obj->y = getHeight() - obj->h*2;
     obj->dx = 4;
     obj->ddy = 1;
-    return * obj;
+    return obj;
 }
 
-Object newBackgroundL0(SDL_Renderer * renderer) {
+Object *newBackgroundL0(SDL_Renderer * renderer) {
     Object * obj = newObject(renderer, ASSET_BACKGROUND_L0);
-    return * obj;
+    return obj;
 }
 
-Object newBackgroundL1(SDL_Renderer * renderer) {
+Object *newBackgroundL1(SDL_Renderer * renderer) {
     Object * obj = newObject(renderer, ASSET_BACKGROUND_L1);
-    return * obj;
+    return obj;
 }
 
-Object newBackgroundL2(SDL_Renderer * renderer) {
+Object *newBackgroundL2(SDL_Renderer * renderer) {
     Object * obj = newObject(renderer, ASSET_BACKGROUND_L2);
-    return * obj;
+    return obj;
 }
 
 GameObjects * setup(SDL_Renderer * renderer) {
-    int numberOfObjects = 9;
+    int numberOfObjects = 8;
 
-    GameObjects * objs = (GameObjects * ) malloc(sizeof(GameObjects));
+    GameObjects * objs = (GameObjects * ) calloc(sizeof(GameObjects), 1);
     
     objs->n = numberOfObjects;
-    objs->objects = (Object *) malloc(sizeof(Object) * objs->n);
+    objs->objects = (Object **) calloc(sizeof(Object*), objs->n);
+
+    for(int i = 0; i < objs->n; i++) {
+        objs->objects[i] = (Object *) calloc(sizeof(Object), 1);
+    }
+
+    //Instancia camadas do background.
 
     objs->objects[0] = newBackgroundL0(renderer);
     objs->objects[1] = newBackgroundL1(renderer);
     objs->objects[2] = newBackgroundL2(renderer);
+
+    //Instancia players.
+
     objs->objects[3] = newPlayer(renderer);
 
-    double x1,x2,x3,x4,x5,y1,y2,y3,y4,y5;
+    //Instancia inimigos.
 
-    x1 = 1*getWidth()/6;
-    x2 = 2*getWidth()/6;
-    x3 = 3*getWidth()/6;
-    x4 = 4*getWidth()/6;
-    x5 = 5*getWidth()/6;
+    objs->objects[4] = newEnemy(renderer, -1*getHeight()/11);
+    objs->objects[5] = newEnemy(renderer, -3*getHeight()/11);
+    objs->objects[6] = newEnemy(renderer, -5*getHeight()/11);
+    objs->objects[7] = newEnemy(renderer, -7*getHeight()/11);
+    objs->objects[8] = newEnemy(renderer, -9*getHeight()/11);
 
-    y1 = -2*getHeight()/10;
-    y2 = -6*getHeight()/10;
-    y3 = -10*getHeight()/10;
-    y4 = -14*getHeight()/10;
-    y5 = -18*getHeight()/10;
-
-    objs->objects[4] = newEnemy(renderer,x1,y1);
-    objs->objects[5] = newEnemy(renderer,x2,y2);
-    objs->objects[6] = newEnemy(renderer,x3,y3);
-    objs->objects[7] = newEnemy(renderer,x4,y4);
-    objs->objects[8] = newEnemy(renderer,x5,y5);
+    //Retorna objetos.
 
     return objs;
 }
 
 void handleKeyboard(GameObjects * objs) {
-    Object * player = &objs->objects[3];
+    Object * player = objs->objects[3];
     const Uint8* keystates = SDL_GetKeyboardState(NULL);
 
     int bounds_d = getHeight() - player->h*2;
@@ -105,20 +105,21 @@ void handleKeyboard(GameObjects * objs) {
 }
 
 void updateEnemies(GameObjects * objs) {
-    for(int i = 4; i <= objs->n; i++) {
-        Object * enemy = &objs->objects[i];
+    for(int i = 4; i < objs->n; i++) {
+        Object * enemy = objs->objects[i];
         enemy->dy += enemy->ddy;
         enemy->y += enemy->dy;
         if(enemy->y >= getHeight() + enemy->h) {
-            enemy->y = -enemy->h;
-            enemy->dy = .5;
-            enemy->x = rand() % getWidth();
+            //Desaloca inimigo ao atingir o chao.
+            free(enemy);
+            //Aloca outro inimigo.
+            objs->objects[i] = newEnemy(renderer, -50);
         }
     }
 }
 
 void updatePlayer(GameObjects * objs) {
-    Object * player = &objs->objects[3];
+    Object * player = objs->objects[3];
     player->dx += player->ddx;
     player->x += player->dx;
     player->dy += player->ddy;
@@ -140,9 +141,9 @@ void finish() {
 }
 
 void checkForCollision(GameObjects * objs) {
-    Object * player = &objs->objects[3];
-    for(int i = 4; i <= objs->n; i++) {
-        Object * enemy = &objs->objects[i];
+    Object * player = objs->objects[3];
+    for(int i = 4; i < objs->n; i++) {
+        Object * enemy = objs->objects[i];
         if(circularCollision(player,enemy)) {
             printf("Collision! Quitting game...");
             SDL_Delay(1000);
@@ -164,7 +165,7 @@ void draw(SDL_Renderer * renderer, GameObjects * objs) {
     SDL_RenderClear(renderer);
 
     for(int i = 0; i < objs->n; i++) {
-        Object *object = &objs->objects[i];
+        Object *object = objs->objects[i];
         SDL_Rect destination;
         destination.x = object->x;
         destination.y = object->y;

@@ -18,7 +18,7 @@ int getHeight() {
 
 
 Object * newObject(SDL_Renderer * renderer, char * texturePath) {
-    Object * object = (Object *) malloc(sizeof(Object));
+    Object * object = (Object *) calloc(sizeof(Object), 1);
 
     SDL_Texture * texture = IMG_LoadTexture(renderer, texturePath);
 
